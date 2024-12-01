@@ -4,8 +4,7 @@ const cors = require('cors');
 require('dotenv').config();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { Server } = require('socket.io');
-const http = require('http')
+
 
 /*<<<<<<< HEAD
 const path = require("path");
@@ -192,40 +191,3 @@ app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
 
-const server = http.createServer(app)
-
-const io = new Server(server, {
-    cors: {
-        origin: '*',
-        methods: ['GET', 'POST'],
-    },
-})
-
-//Checking if the quizz code is valid
-io.on("connection", (socket) => {
-    console.log(`User is connected: ${socket.id}`);
-  
-    socket.on("send_code", async (code) => {
-      console.log("Received quiz code:", code);
-      try {
-        const quiz = await quizzesCollection.findOne( {quizId: Number(code)} );
-    
-        if (quiz && quiz.isValid) {
-          socket.emit('checkQuizCode', { isValid: true });
-        } else {
-          socket.emit('checkQuizCode', { isValid: false });
-        }
-      } catch (err) {
-        console.error("Error querying database:", err);
-        socket.emit('checkQuizCode', { isValid: false });
-      }
-    });
-
-    socket.on('disconnect', () => {
-        console.log('User disconnected:', socket.id);
-      });
-})
-
-server.listen(3001, () => {
-    console.log(`Socket server 3001 is running!`)
-})
