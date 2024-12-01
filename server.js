@@ -4,6 +4,9 @@ const cors = require('cors');
 require('dotenv').config();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { Server } = require('socket.io');
+const http = require('http')
+
 /*<<<<<<< HEAD
 const path = require("path");
 
@@ -188,9 +191,6 @@ app.post("/login", async (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
-const { Server } = require('socket.io');
-const http = require('http')
-
 
 const server = http.createServer(app)
 
@@ -200,15 +200,6 @@ const io = new Server(server, {
         methods: ['GET', 'POST'],
     },
 })
-
-
-
-client.connect().then(() => {
-  console.log("Connected to MongoDB");
-  const db = client.db("quizApp"); 
-  quizzesCollection = db.collection("quizzes"); 
-  usersCollection = db.collection("users");
-});
 
 //Checking if the quizz code is valid
 io.on("connection", (socket) => {
